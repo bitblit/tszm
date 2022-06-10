@@ -1,25 +1,76 @@
 {
-  "name": "jszm",
-  "version": "2.0.3",
-  "description": "A public-domain Z-machine implementation written in JavaScript/ES6",
+  "name": "tszm",
+  "version": "0.0.1",
+  "description": "A public-domain Z-machine implementation written in Typescript",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "contributors": [
+    "Daniel Lehenbauer <DLehenbauer>",
+    "Christopher Weiss <bitblit@gmail.com>"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
+  "prettier": {
+    "printWidth": 140,
+    "singleQuote": true,
+    "arrowParens": "always"
+  },
+  "license": "Apache-2.0",
+  "config": {},
   "scripts": {
-     "test": "node example.js minizork.z3"
+    "prepare-to-publish": "yarn clean-compile && yarn run apply-ci-vars && yarn remove-compiled-tests",
+    "clean-compile": "yarn run clean && yarn run generate-barrels && yarn run compile && yarn copy-static-files",
+    "compile": "tsc",
+    "watch": "tsc-watch",
+    "remove-compiled-tests": "rimraf ./lib/**/*.spec.d.ts && rimraf ./lib/**/*.spec.js && rimraf ./lib/**/*.spec.js.map",
+    "clean": "shx rm -Rf lib bundles temp dist",
+    "compile-test": "yarn compile && yarn test",
+    "test": "jest",
+    "apply-ci-vars": "node dist/node-only/ci/apply-ci-env-variables-to-files github dist/static/build-properties.json",
+    "lint": "eslint src/**/*.ts",
+    "lint-fix": "eslint --fix src/**/*.ts",
+    "generate-barrels": "barrelsby --delete -d src -q -e .*\\.spec\\.ts -e example\\.ts",
+    "test-exec": "node dist/example.js enchanter.z3"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DLehenbauer/jszm.git"
+    "url": "git+https://github.com/bitblit/tszm.git"
   },
   "keywords": [
-    "jszm",
+    "tszm",
     "z-machine",
     "infocom",
     "zork"
   ],
   "bugs": {
-    "url": "https://github.com/DLehenbauer/jszm/issues"
+    "url": "https://github.com/bitblit/jszm/issues"
   },
-  "homepage": "https://github.com/DLehenbauer/jszm#readme",
+  "homepage": "https://github.com/bitblit/jszm#readme",
   "devDependencies": {
-    "genasync": "^1.3.0"
+    "@types/node": "14.14.31",
+    "@types/jest": "27.5.1",
+    "@typescript-eslint/eslint-plugin": "5.25.0",
+    "@typescript-eslint/parser": "5.25.0",
+    "barrelsby": "2.3.4",
+    "eslint": "8.15.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-prettier": "4.0.0",
+    "genasync": "1.3.0",
+    "husky": "8.0.1",
+    "jest": "28.1.0",
+    "prettier": "2.6.2",
+    "pretty-quick": "3.1.3",
+    "shx": "0.3.4",
+    "ts-jest": "28.0.2",
+    "ts-node": "10.7.0",
+    "tsc-watch": "5.0.3",
+    "typescript": "4.6.4"
   }
 }

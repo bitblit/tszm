@@ -201,7 +201,7 @@ JSZM.prototype={
   memInit: null,
   parseVocab: function(s) {
     this.vocabulary=new Map();
-    
+
     if (s === 0) {                                    // If the story file does not contain a dictionary..
       this.regBreak=new RegExp("[^ \\n\\t]+","g");    //   use the default word separators
       return;                                         //   and early exit.
@@ -247,7 +247,7 @@ JSZM.prototype={
       opc=this.get(op2);
     };
     const initRng = () => {
-      this.seed = (Math.random() * 0xFFFFFFFF) >>> 0;      
+      this.seedX = (Math.random() * 0xFFFFFFFF) >>> 0;
     };
     init=() => {
       mem=this.mem=new Uint8Array(this.memInit);
@@ -607,13 +607,13 @@ JSZM.prototype={
             if (op0 === 0) {
               initRng();                // If 0, seed using Math.random().
             } else {
-              this.seed = (op0 >>> 0);  // If negative, seed with the specified value.
+              this.seedX = (op0 >>> 0);  // If negative, seed with the specified value.
             }
             store(0);                   // Reseeding always returns 0.
             break;
           }
-          this.seed = (1664525 * this.seed + 1013904223) >>> 0;     // Linear congruential generator
-          store(Math.floor((this.seed / 0xFFFFFFFF) * op0) + 1);    // Return integer in range [1..op0] (inclusive).
+          this.seedX = (1664525 * this.seedX + 1013904223) >>> 0;     // Linear congruential generator
+          store(Math.floor((this.seedX / 0xFFFFFFFF) * op0) + 1);    // Return integer in range [1..op0] (inclusive).
           break;
         case 232: // PUSH
           ds.push(op0);
